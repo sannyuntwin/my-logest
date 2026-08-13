@@ -8,6 +8,7 @@ Logistics tracking project with a FastAPI backend, PostgreSQL database, and a Re
 - Database schema for providers, shipments, status history, and provider rates
 - Seed data for providers, pricing, and a sample shipment
 - Frontend dashboard for tracking lookup and recent shipment viewing
+- Frontend language support for English, Thai, and Myanmar
 - Docker Compose setup for local development
 
 ## Tech Stack

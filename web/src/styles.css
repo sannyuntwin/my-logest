@@ -1,5 +1,5 @@
 :root {
-  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Segoe UI', 'Myanmar Text', 'Noto Sans Myanmar', 'Noto Sans Thai', 'Helvetica Neue', Arial, sans-serif;
   color: #eaf0ff;
   background:
     radial-gradient(circle at top left, rgba(76, 133, 255, 0.28), transparent 30%),
@@ -114,6 +114,50 @@ button {
   max-width: 58ch;
   color: #bfd0f7;
   line-height: 1.65;
+}
+
+.language-switcher {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+}
+
+.language-switcher > span {
+  color: #8ea8d9;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.language-switcher__group {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.language-switcher__button {
+  border: 1px solid rgba(151, 177, 233, 0.18);
+  background: rgba(8, 15, 29, 0.78);
+  color: #dce7ff;
+  border-radius: 999px;
+  padding: 0.65rem 0.95rem;
+  min-width: 4.5rem;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.language-switcher__button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(135, 163, 255, 0.4);
+}
+
+.language-switcher__button.is-active {
+  background: linear-gradient(135deg, #6f8dff, #89d0ff);
+  color: #07111f;
+  border-color: transparent;
+  font-weight: 700;
 }
 
 .search-panel {
