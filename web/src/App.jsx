@@ -14,6 +14,47 @@ const TRANSLATIONS = {
       title: 'Track shipments, surface bottlenecks, and keep the line moving.',
       body: 'A polished frontend for the logistics exam project. Search by tracking number, inspect the latest routing updates, and review current shipments at a glance.',
     },
+    dashboard: {
+      brand: 'Logistics OS',
+      brandSub: 'Global Operations',
+      navDashboard: 'Dashboard',
+      navShipments: 'Shipments',
+      navLiveMap: 'Live Map',
+      navDetails: 'Details',
+      navWarehouse: 'Warehouse',
+      navSettings: 'Settings',
+      searchPlaceholder: 'Search tracking ID...',
+      quickDirect: 'Direct Track',
+      quickFleet: 'Fleet',
+      quickCarriers: 'Carriers',
+      newShipment: 'New Shipment',
+      createAlert: 'Create Alert',
+      overviewTitle: 'Operations Overview',
+      overviewSubtitle: 'Real-time metrics and global fleet status.',
+      lastUpdated: 'Last updated',
+      lastUpdatedValue: 'Just now',
+      totalShipments: 'Total Shipments',
+      totalShipmentsNote: 'All tracked movements',
+      activeInTransit: 'Active in Transit',
+      activeInTransitNote: 'Currently moving',
+      pendingDelivery: 'Pending Delivery',
+      pendingDeliveryNote: 'Awaiting pickup or dispatch',
+      delayed: 'Delayed',
+      delayedNote: 'Needs review',
+      chartTitle: 'Live Fleet Activity',
+      chartSubtitle: '24-hour movement intensity',
+      recentEvents: 'Recent Transit Events',
+      viewAllEvents: 'View All Events',
+      globalFleetDistribution: 'Global Fleet Distribution',
+      routeHint: 'Tap a shipment to inspect the route',
+      period24h: '24H',
+      period7d: '7D',
+      period30d: '30D',
+      review: 'Review',
+      support: 'Support',
+      notifications: 'Notifications',
+      profile: 'Operations Manager',
+    },
     search: {
       label: 'Tracking number',
       placeholder: 'Example: ABC123456',
@@ -95,6 +136,47 @@ const TRANSLATIONS = {
       title: 'ติดตามพัสดุ ค้นหาจุดติดขัด และเดินงานให้ไหลลื่น',
       body: 'หน้าเว็บสำหรับโจทย์สอบโลจิสติกส์ ใช้ค้นหาด้วยเลขติดตาม ดูเส้นทางล่าสุด และตรวจสอบสถานะพัสดุแบบรวดเร็ว',
     },
+    dashboard: {
+      brand: 'Logistics OS',
+      brandSub: 'Global Operations',
+      navDashboard: 'แดชบอร์ด',
+      navShipments: 'พัสดุ',
+      navLiveMap: 'แผนที่สด',
+      navDetails: 'รายละเอียด',
+      navWarehouse: 'คลังสินค้า',
+      navSettings: 'ตั้งค่า',
+      searchPlaceholder: 'ค้นหา tracking ID...',
+      quickDirect: 'ค้นหาเร็ว',
+      quickFleet: 'ฟลีต',
+      quickCarriers: 'ผู้ให้บริการ',
+      newShipment: 'สร้างพัสดุ',
+      createAlert: 'สร้างแจ้งเตือน',
+      overviewTitle: 'ภาพรวมการปฏิบัติงาน',
+      overviewSubtitle: 'ตัวชี้วัดแบบเรียลไทม์และสถานะฟลีตทั่วโลก',
+      lastUpdated: 'อัปเดตล่าสุด',
+      lastUpdatedValue: 'เมื่อสักครู่',
+      totalShipments: 'พัสดุทั้งหมด',
+      totalShipmentsNote: 'การเคลื่อนไหวทั้งหมดที่ติดตาม',
+      activeInTransit: 'กำลังขนส่ง',
+      activeInTransitNote: 'กำลังเดินทางอยู่',
+      pendingDelivery: 'รอจัดส่ง',
+      pendingDeliveryNote: 'รอรับเข้าระบบหรือส่งต่อ',
+      delayed: 'ล่าช้า',
+      delayedNote: 'ต้องตรวจสอบ',
+      chartTitle: 'กิจกรรมฟลีตสด',
+      chartSubtitle: 'ความเข้มข้นของการเคลื่อนไหว 24 ชั่วโมง',
+      recentEvents: 'เหตุการณ์ขนส่งล่าสุด',
+      viewAllEvents: 'ดูเหตุการณ์ทั้งหมด',
+      globalFleetDistribution: 'การกระจายฟลีตทั่วโลก',
+      routeHint: 'แตะพัสดุเพื่อดูเส้นทาง',
+      period24h: '24 ชม.',
+      period7d: '7 วัน',
+      period30d: '30 วัน',
+      review: 'ตรวจสอบ',
+      support: 'สนับสนุน',
+      notifications: 'การแจ้งเตือน',
+      profile: 'ผู้จัดการฝ่ายปฏิบัติการ',
+    },
     search: {
       label: 'หมายเลขติดตามพัสดุ',
       placeholder: 'ตัวอย่าง: ABC123456',
@@ -175,6 +257,47 @@ const TRANSLATIONS = {
       eyebrow: 'လော့ဂျစ်တစ်စင်တာ',
       title: 'ပစ္စည်းပို့ဆောင်မှုကို ခြေရာခံပါ၊ အခက်အခဲနေရာများကို ရှာပါ၊ လုပ်ငန်းစဉ်ကို လျင်မြန်စွာဆက်လက်ထိန်းသိမ်းပါ',
       body: 'လော့ဂျစ်တစ်စာမေးပွဲအတွက် ပြုလုပ်ထားသော frontend ဖြစ်ပြီး tracking number ဖြင့်ရှာဖွေခြင်း၊ နောက်ဆုံးလမ်းကြောင်းများကြည့်ရှုခြင်းနှင့် လက်ရှိပစ္စည်းများကို မြင်ကွင်းတစ်ခုတည်းတွင် ကြည့်နိုင်သည်',
+    },
+    dashboard: {
+      brand: 'Logistics OS',
+      brandSub: 'Global Operations',
+      navDashboard: 'Dashboard',
+      navShipments: 'Shipments',
+      navLiveMap: 'Live Map',
+      navDetails: 'Details',
+      navWarehouse: 'Warehouse',
+      navSettings: 'Settings',
+      searchPlaceholder: 'Search tracking ID...',
+      quickDirect: 'Direct Track',
+      quickFleet: 'Fleet',
+      quickCarriers: 'Carriers',
+      newShipment: 'ပစ္စည်းအသစ်',
+      createAlert: 'Create Alert',
+      overviewTitle: 'Operations Overview',
+      overviewSubtitle: 'Real-time metrics and global fleet status.',
+      lastUpdated: 'Last updated',
+      lastUpdatedValue: 'Just now',
+      totalShipments: 'Total Shipments',
+      totalShipmentsNote: 'All tracked movements',
+      activeInTransit: 'Active in Transit',
+      activeInTransitNote: 'Currently moving',
+      pendingDelivery: 'Pending Delivery',
+      pendingDeliveryNote: 'Awaiting pickup or dispatch',
+      delayed: 'Delayed',
+      delayedNote: 'Needs review',
+      chartTitle: 'Live Fleet Activity',
+      chartSubtitle: '24-hour movement intensity',
+      recentEvents: 'Recent Transit Events',
+      viewAllEvents: 'View All Events',
+      globalFleetDistribution: 'Global Fleet Distribution',
+      routeHint: 'Tap a shipment to inspect the route',
+      period24h: '24H',
+      period7d: '7D',
+      period30d: '30D',
+      review: 'Review',
+      support: 'Support',
+      notifications: 'Notifications',
+      profile: 'Operations Manager',
     },
     search: {
       label: 'Tracking နံပါတ်',
@@ -444,7 +567,14 @@ function ShipmentStatusBadge({ status, copy }) {
   return <span className={`status-badge ${tone}`}>{copy.status[status] || status}</span>
 }
 
-function RouteMap({ shipment, copy }) {
+function RouteMap({
+  shipment,
+  copy,
+  kicker = copy.map.kicker,
+  title = copy.map.title,
+  subtitle = copy.map.subtitle,
+  emptyLabel = copy.map.unavailable,
+}) {
   const mapState = buildRouteMapState(shipment)
   const statusLabel = shipment ? copy.status[shipment.current_status] || shipment.current_status : ''
   const statusTone = shipment ? STATUS_TONES[shipment.current_status] || 'status--pending' : 'status--pending'
@@ -453,9 +583,9 @@ function RouteMap({ shipment, copy }) {
     <section className="route-map">
       <div className="route-map__header">
         <div>
-          <p className="panel-kicker">{copy.map.kicker}</p>
-          <h3>{copy.map.title}</h3>
-          <p className="route-map__subtitle">{copy.map.subtitle}</p>
+          <p className="panel-kicker">{kicker}</p>
+          <h3>{title}</h3>
+          <p className="route-map__subtitle">{subtitle}</p>
         </div>
         {shipment ? <span className={`status-badge ${statusTone}`}>{statusLabel}</span> : null}
       </div>
@@ -540,9 +670,276 @@ function RouteMap({ shipment, copy }) {
           </div>
         </>
       ) : (
-        <div className="empty-state">{copy.map.unavailable}</div>
+        <div className="empty-state">{emptyLabel}</div>
       )}
     </section>
+  )
+}
+
+const ACTIVITY_BASELINES = {
+  '24h': [18, 32, 46, 28, 53, 41, 24, 35],
+  '7d': [22, 29, 37, 26, 44, 39, 31, 42],
+  '30d': [16, 24, 31, 21, 38, 33, 27, 36],
+}
+
+const ACTIVITY_LABELS = {
+  '24h': ['00', '03', '06', '09', '12', '15', '18', '21'],
+  '7d': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', ''],
+  '30d': ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8'],
+}
+
+function clampBar(value) {
+  return Math.max(12, Math.min(96, value))
+}
+
+function buildFleetSummary(shipments) {
+  const total = shipments.length
+  const active = shipments.filter((shipment) => shipment.current_status === 'in_transit').length
+  const pending = shipments.filter((shipment) => ['pending', 'pickup'].includes(shipment.current_status)).length
+  const delayed = shipments.filter((shipment) => shipment.current_status === 'failed').length
+
+  return { total, active, pending, delayed }
+}
+
+function buildActivitySeries(shipments, range) {
+  const summary = buildFleetSummary(shipments)
+  const base = ACTIVITY_BASELINES[range] || ACTIVITY_BASELINES['24h']
+  const boost = summary.total * 2 + summary.active * 4 + summary.pending * 1.5 + summary.delayed * 5
+
+  return base.map((value, index) => ({
+    label: ACTIVITY_LABELS[range]?.[index] || '',
+    value: clampBar(Math.round(value + boost * (0.38 + (index % 3) * 0.08))),
+  }))
+}
+
+function describeShipmentEvent(shipment, copy) {
+  const statusLabel = copy.status[shipment.current_status] || shipment.current_status
+  const location = shipment.current_location || shipment.destination || shipment.origin || copy.tracking.noLocation
+
+  if (shipment.current_status === 'delivered') {
+    return `${statusLabel} · ${shipment.destination || location}`
+  }
+
+  if (shipment.current_status === 'failed') {
+    return `${statusLabel} · ${location}`
+  }
+
+  if (shipment.current_status === 'pickup') {
+    return `${statusLabel} · ${shipment.origin || location}`
+  }
+
+  return `${statusLabel} · ${location}`
+}
+
+function MetricCard({ label, value, note, tone = 'neutral' }) {
+  return (
+    <article className={`metric-card metric-card--${tone}`}>
+      <span className="metric-label">{label}</span>
+      <strong className="metric-value">{value}</strong>
+      <span className="metric-note">{note}</span>
+    </article>
+  )
+}
+
+function ActivityChart({ series, copy, range, onChangeRange }) {
+  return (
+    <section className="dashboard-panel">
+      <div className="panel-heading panel-heading--compact">
+        <div>
+          <p className="panel-kicker">{copy.dashboard.chartTitle}</p>
+          <h2>{copy.dashboard.chartSubtitle}</h2>
+        </div>
+        <div className="range-switcher" role="group" aria-label={copy.dashboard.chartTitle}>
+          {[
+            ['24h', copy.dashboard.period24h],
+            ['7d', copy.dashboard.period7d],
+            ['30d', copy.dashboard.period30d],
+          ].map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              className={`range-switcher__button ${range === key ? 'is-active' : ''}`}
+              onClick={() => onChangeRange(key)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="chart-panel">
+        <div className="chart-axis chart-axis--top">
+          <span>1k</span>
+          <span>750</span>
+          <span>500</span>
+          <span>250</span>
+          <span>0</span>
+        </div>
+        <div className="chart-bars" aria-label={copy.dashboard.chartTitle}>
+          {series.map((bar) => (
+            <div key={`${range}-${bar.label}`} className="chart-bar">
+              <div className="chart-bar__track">
+                <div className="chart-bar__fill" style={{ height: `${bar.value}%` }} />
+              </div>
+              <span>{bar.label}</span>
+            </div>
+          ))}
+        </div>
+        <div className="chart-axis chart-axis--bottom">
+          {series.map((bar) => (
+            <span key={`axis-${range}-${bar.label}`}>{bar.label}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function TransitFeed({ shipments, copy, locale, onSelectShipment }) {
+  return (
+    <section className="dashboard-panel">
+      <div className="panel-heading panel-heading--compact">
+        <div>
+          <p className="panel-kicker">{copy.dashboard.recentEvents}</p>
+          <h2>{copy.dashboard.viewAllEvents}</h2>
+        </div>
+      </div>
+
+      <div className="transit-feed">
+        {shipments.length ? (
+          shipments.slice(0, 4).map((shipment) => (
+            <button
+              key={shipment.id}
+              type="button"
+              className="transit-feed__item"
+              onClick={() => onSelectShipment(shipment.tracking_number)}
+            >
+              <div className="transit-feed__topline">
+                <strong>{shipment.tracking_number}</strong>
+                <span className="transit-feed__time">{formatDateTime(shipment.created_at, locale)}</span>
+              </div>
+              <p>{describeShipmentEvent(shipment, copy)}</p>
+              <div className="transit-feed__footer">
+                <ShipmentStatusBadge status={shipment.current_status} copy={copy} />
+                <span>{shipment.provider?.name || copy.recent.unknownProvider}</span>
+              </div>
+            </button>
+          ))
+        ) : (
+          <div className="empty-state">{copy.recent.empty}</div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+function SideRail({ copy, onSelectNav }) {
+  const navItems = [
+    copy.dashboard.navDashboard,
+    copy.dashboard.navShipments,
+    copy.dashboard.navLiveMap,
+    copy.dashboard.navDetails,
+    copy.dashboard.navWarehouse,
+    copy.dashboard.navSettings,
+  ]
+
+  return (
+    <aside className="sidebar">
+      <div className="sidebar__brand">
+        <div className="sidebar__logo">LO</div>
+        <div>
+          <strong>{copy.dashboard.brand}</strong>
+          <p>{copy.dashboard.brandSub}</p>
+        </div>
+      </div>
+
+      <button type="button" className="sidebar__cta">
+        +
+        <span>{copy.dashboard.newShipment}</span>
+      </button>
+
+      <nav className="sidebar__nav" aria-label={copy.dashboard.navDashboard}>
+        {navItems.map((item, index) => (
+          <button
+            key={item}
+            type="button"
+            className={`sidebar__nav-item ${index === 0 ? 'is-active' : ''}`}
+            onClick={() => onSelectNav?.(item)}
+          >
+            <span className="sidebar__dot" />
+            {item}
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar__footer">
+        <div className="sidebar__status">
+          <span className="sidebar__status-dot" />
+          <div>
+            <strong>{copy.dashboard.support}</strong>
+            <p>{copy.dashboard.notifications}</p>
+          </div>
+        </div>
+        <div className="sidebar__user">
+          <div className="sidebar__avatar">OM</div>
+          <div>
+            <strong>{copy.dashboard.profile}</strong>
+            <p>Online</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  )
+}
+
+function TopBar({ copy, trackingNumber, onTrackingChange, onSubmit, loadingTracking, language, setLanguage }) {
+  return (
+    <header className="topbar">
+      <form className="topbar__search" onSubmit={onSubmit}>
+        <input
+          value={trackingNumber}
+          onChange={(event) => onTrackingChange(event.target.value)}
+          placeholder={copy.dashboard.searchPlaceholder}
+          autoComplete="off"
+        />
+        <button type="submit" className="topbar__search-button" disabled={loadingTracking}>
+          {loadingTracking ? copy.search.searching : copy.search.button}
+        </button>
+      </form>
+
+      <div className="topbar__links">
+        <button type="button" className="topbar__link is-active">{copy.dashboard.quickDirect}</button>
+        <button type="button" className="topbar__link">{copy.dashboard.quickFleet}</button>
+        <button type="button" className="topbar__link">{copy.dashboard.quickCarriers}</button>
+      </div>
+
+      <div className="topbar__actions">
+        <div className="language-switcher language-switcher--compact" aria-label={copy.languageLabel}>
+          <span>{copy.languageLabel}</span>
+          <div className="language-switcher__group" role="group" aria-label={copy.languageLabel}>
+            {Object.keys(copy.languages).map((code) => (
+              <button
+                key={code}
+                type="button"
+                className={`language-switcher__button ${language === code ? 'is-active' : ''}`}
+                onClick={() => setLanguage(code)}
+                aria-pressed={language === code}
+                title={copy.languages[code]}
+              >
+                {copy.languageShort[code]}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <button type="button" className="topbar__ghost">
+          {copy.dashboard.notifications}
+        </button>
+        <button type="button" className="topbar__primary">
+          {copy.dashboard.createAlert}
+        </button>
+      </div>
+    </header>
   )
 }
 
@@ -555,6 +952,7 @@ function App() {
   const [loadingTracking, setLoadingTracking] = useState(false)
   const [loadingRecent, setLoadingRecent] = useState(true)
   const [errorState, setErrorState] = useState(null)
+  const [timeRange, setTimeRange] = useState('24h')
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -600,19 +998,11 @@ function App() {
     return () => controller.abort()
   }, [])
 
-  async function handleSubmit(event) {
-    event.preventDefault()
-    const value = trackingNumber.trim()
-
-    if (!value) {
-      setErrorState({ type: 'key', key: 'missingTracking' })
-      return
-    }
-
+  async function loadShipment(trackingId) {
     try {
       setErrorState(null)
       setLoadingTracking(true)
-      const response = await fetch(`${API_BASE_URL}/api/tracking/${encodeURIComponent(value)}`)
+      const response = await fetch(`${API_BASE_URL}/api/tracking/${encodeURIComponent(trackingId)}`)
       const payload = await response.json()
 
       if (!response.ok) {
@@ -626,6 +1016,18 @@ function App() {
     } finally {
       setLoadingTracking(false)
     }
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault()
+    const value = trackingNumber.trim()
+
+    if (!value) {
+      setErrorState({ type: 'key', key: 'missingTracking' })
+      return
+    }
+
+    await loadShipment(value)
   }
 
   const errorMessage = useMemo(() => {
@@ -649,207 +1051,175 @@ function App() {
   }, [trackingData])
 
   const locale = copy.meta.htmlLang === 'my' ? 'my-MM' : copy.meta.htmlLang === 'th' ? 'th-TH' : 'en-US'
+  const fleetSummary = useMemo(() => buildFleetSummary(recentShipments), [recentShipments])
+  const activitySeries = useMemo(
+    () => buildActivitySeries(recentShipments, timeRange),
+    [recentShipments, timeRange],
+  )
+  const selectedShipment = trackingData || recentShipments[0] || null
+  const inspectShipment = async (trackingId) => {
+    setTrackingNumber(trackingId)
+    await loadShipment(trackingId)
+  }
 
   return (
-    <div className="page-shell">
-      <div className="glow glow--left" />
-      <div className="glow glow--right" />
+    <div className="os-shell">
+      <SideRail copy={copy} onSelectNav={() => {}} />
 
-      <main className="app-frame">
-        <section className="hero-card">
-          <div className="hero-copy">
-            <p className="eyebrow">{copy.hero.eyebrow}</p>
-            <h1>{copy.hero.title}</h1>
-            <p className="hero-text">{copy.hero.body}</p>
-          </div>
+      <div className="workspace">
+        <TopBar
+          copy={copy}
+          trackingNumber={trackingNumber}
+          onTrackingChange={setTrackingNumber}
+          onSubmit={handleSubmit}
+          loadingTracking={loadingTracking}
+          language={language}
+          setLanguage={setLanguage}
+        />
 
-          <div className="hero-actions">
-            <div className="language-switcher language-switcher--compact" aria-label={copy.languageLabel}>
-              <span>{copy.languageLabel}</span>
-              <div className="language-switcher__group" role="group" aria-label={copy.languageLabel}>
-                {Object.keys(copy.languages).map((code) => (
-                  <button
-                    key={code}
-                    type="button"
-                    className={`language-switcher__button ${language === code ? 'is-active' : ''}`}
-                    onClick={() => setLanguage(code)}
-                    aria-pressed={language === code}
-                    title={copy.languages[code]}
-                  >
-                    {copy.languageShort[code]}
-                  </button>
-                ))}
-              </div>
+        <main className="dashboard">
+          <section className="overview-card">
+            <div>
+              <p className="eyebrow">{copy.dashboard.brandSub}</p>
+              <h1>{copy.dashboard.overviewTitle}</h1>
+              <p className="overview-card__subtitle">{copy.dashboard.overviewSubtitle}</p>
             </div>
-          </div>
+            <div className="overview-card__meta">
+              <span>{copy.dashboard.lastUpdated}</span>
+              <strong>{copy.dashboard.lastUpdatedValue}</strong>
+            </div>
+          </section>
 
-          <form className="search-panel" onSubmit={handleSubmit}>
-            <label htmlFor="trackingNumber">{copy.search.label}</label>
-            <div className="search-row">
-              <input
-                id="trackingNumber"
-                value={trackingNumber}
-                onChange={(event) => setTrackingNumber(event.target.value)}
-                placeholder={copy.search.placeholder}
-                autoComplete="off"
+          {errorMessage ? <div className="dashboard-alert">{errorMessage}</div> : null}
+
+          <section className="metrics-grid metrics-grid--overview">
+            <MetricCard
+              label={copy.dashboard.totalShipments}
+              value={fleetSummary.total}
+              note={copy.dashboard.totalShipmentsNote}
+              tone="blue"
+            />
+            <MetricCard
+              label={copy.dashboard.activeInTransit}
+              value={fleetSummary.active}
+              note={copy.dashboard.activeInTransitNote}
+              tone="teal"
+            />
+            <MetricCard
+              label={copy.dashboard.pendingDelivery}
+              value={fleetSummary.pending}
+              note={copy.dashboard.pendingDeliveryNote}
+              tone="amber"
+            />
+            <MetricCard
+              label={copy.dashboard.delayed}
+              value={fleetSummary.delayed}
+              note={copy.dashboard.delayedNote}
+              tone="rose"
+            />
+          </section>
+
+          <section className="main-grid">
+            <ActivityChart
+              series={activitySeries}
+              copy={copy}
+              range={timeRange}
+              onChangeRange={setTimeRange}
+            />
+            <TransitFeed
+              shipments={recentShipments}
+              copy={copy}
+              locale={locale}
+              onSelectShipment={inspectShipment}
+            />
+          </section>
+
+          <section className="bottom-grid">
+            <article className="dashboard-panel dashboard-panel--map">
+              <RouteMap
+                shipment={selectedShipment}
+                copy={copy}
+                kicker={copy.dashboard.globalFleetDistribution}
+                title={copy.dashboard.globalFleetDistribution}
+                subtitle={copy.dashboard.routeHint}
+                emptyLabel={copy.map.unavailable}
               />
-              <button type="submit" disabled={loadingTracking}>
-                {loadingTracking ? copy.search.searching : copy.search.button}
-              </button>
-            </div>
-            <p className="search-hint">
-              {copy.search.hint} <code>{API_BASE_URL}/api/tracking/:tracking_number</code>
-            </p>
-            {errorMessage ? <p className="error-banner">{errorMessage}</p> : null}
-          </form>
-        </section>
+            </article>
 
-        <section className="metrics-grid">
-          <article className="metric-card">
-            <span className="metric-label">{copy.metrics.apiStatus}</span>
-            <strong className="metric-value">{copy.metrics.apiValue}</strong>
-            <span className="metric-note">{copy.metrics.apiNote}</span>
-          </article>
-          <article className="metric-card">
-            <span className="metric-label">{copy.metrics.trackedProviders}</span>
-            <strong className="metric-value">{copy.metrics.trackedProvidersValue}</strong>
-            <span className="metric-note">{copy.metrics.trackedProvidersNote}</span>
-          </article>
-          <article className="metric-card">
-            <span className="metric-label">{copy.metrics.shipmentFocus}</span>
-            <strong className="metric-value">{copy.metrics.shipmentFocusValue}</strong>
-            <span className="metric-note">{copy.metrics.shipmentFocusNote}</span>
-          </article>
-        </section>
-
-        <section className="content-grid">
-          <article className="panel">
-            <div className="panel-heading">
-              <div>
-                <p className="panel-kicker">{copy.tracking.sectionKicker}</p>
-                <h2>{copy.tracking.sectionTitle}</h2>
-              </div>
-              {trackingData ? <ShipmentStatusBadge status={trackingData.current_status} copy={copy} /> : null}
-            </div>
-
-            {trackingData ? (
-              <div className="shipment-card">
-                <RouteMap shipment={trackingData} copy={copy} />
-
-                <div className="shipment-topline">
-                  <div>
-                    <span className="field-label">{copy.tracking.trackingNumber}</span>
-                    <strong>{trackingData.tracking_number}</strong>
-                  </div>
-                  <div>
-                    <span className="field-label">{copy.tracking.provider}</span>
-                    <strong>{trackingData.provider?.name || '—'}</strong>
-                  </div>
+            <article className="dashboard-panel dashboard-panel--detail">
+              <div className="panel-heading panel-heading--compact">
+                <div>
+                  <p className="panel-kicker">{copy.tracking.sectionKicker}</p>
+                  <h2>{copy.tracking.sectionTitle}</h2>
                 </div>
-
-                <div className="detail-grid">
-                  <div>
-                    <span className="field-label">{copy.tracking.origin}</span>
-                    <p>{trackingData.origin || '—'}</p>
-                  </div>
-                  <div>
-                    <span className="field-label">{copy.tracking.destination}</span>
-                    <p>{trackingData.destination || '—'}</p>
-                  </div>
-                  <div>
-                    <span className="field-label">{copy.tracking.zone}</span>
-                    <p>{trackingData.destination_zone || '—'}</p>
-                  </div>
-                  <div>
-                    <span className="field-label">{copy.tracking.weight}</span>
-                    <p>
-                      {formatWeight(trackingData.weight_kg, locale)} {copy.tracking.weightUnit}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="field-label">{copy.tracking.currentLocation}</span>
-                    <p>{trackingData.current_location || '—'}</p>
-                  </div>
-                  <div>
-                    <span className="field-label">{copy.tracking.estimatedDelivery}</span>
-                    <p>{trackingData.estimated_delivery || '—'}</p>
-                  </div>
-                </div>
-
-                <div className="timeline">
-                  <div className="timeline-header">
-                    <h3>{copy.tracking.history}</h3>
-                    <span>
-                      {trackingData.status_history?.length || 0} {copy.tracking.events}
-                    </span>
-                  </div>
-                  {activeMilestones.length ? (
-                    <ul>
-                      {activeMilestones.map((item, index) => (
-                        <li key={`${item.status}-${item.timestamp}-${index}`}>
-                          <span className="timeline-dot" />
-                          <div>
-                            <strong>{copy.status[item.status] || item.status}</strong>
-                            <p>{item.location || copy.tracking.noLocation}</p>
-                            <small>
-                              {formatDateTime(item.timestamp, locale)}
-                              {item.provider?.name ? ` · ${item.provider.name}` : ''}
-                            </small>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="empty-state">{copy.tracking.noHistory}</p>
-                  )}
-                </div>
+                {selectedShipment ? (
+                  <ShipmentStatusBadge status={selectedShipment.current_status} copy={copy} />
+                ) : null}
               </div>
-            ) : (
-              <div className="empty-state">{copy.tracking.empty}</div>
-            )}
-          </article>
 
-          <article className="panel">
-            <div className="panel-heading">
-              <div>
-                <p className="panel-kicker">{copy.recent.kicker}</p>
-                <h2>{copy.recent.title}</h2>
-              </div>
-            </div>
-
-            {loadingRecent ? (
-              <div className="empty-state">{copy.recent.loading}</div>
-            ) : recentShipments.length ? (
-              <div className="shipment-list">
-                {recentShipments.map((shipment) => (
-                  <button
-                    key={shipment.id}
-                    type="button"
-                    className="shipment-list-item"
-                    onClick={() => setTrackingNumber(shipment.tracking_number)}
-                  >
-                    <div className="shipment-list-top">
-                      <strong>{shipment.tracking_number}</strong>
-                      <ShipmentStatusBadge status={shipment.current_status} copy={copy} />
+              {selectedShipment ? (
+                <div className="shipment-card shipment-card--compact">
+                  <div className="detail-grid detail-grid--single">
+                    <div>
+                      <span className="field-label">{copy.tracking.trackingNumber}</span>
+                      <p>{selectedShipment.tracking_number}</p>
                     </div>
-                    <p>
-                      {shipment.origin || '—'} {copy.recent.fromTo} {shipment.destination || '—'}
-                    </p>
-                    <div className="shipment-list-meta">
-                      <span>{shipment.provider?.name || copy.recent.unknownProvider}</span>
+                    <div>
+                      <span className="field-label">{copy.tracking.provider}</span>
+                      <p>{selectedShipment.provider?.name || '—'}</p>
+                    </div>
+                    <div>
+                      <span className="field-label">{copy.tracking.origin}</span>
+                      <p>{selectedShipment.origin || '—'}</p>
+                    </div>
+                    <div>
+                      <span className="field-label">{copy.tracking.destination}</span>
+                      <p>{selectedShipment.destination || '—'}</p>
+                    </div>
+                    <div>
+                      <span className="field-label">{copy.tracking.currentLocation}</span>
+                      <p>{selectedShipment.current_location || '—'}</p>
+                    </div>
+                    <div>
+                      <span className="field-label">{copy.tracking.weight}</span>
+                      <p>
+                        {formatWeight(selectedShipment.weight_kg, locale)} {copy.tracking.weightUnit}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="timeline timeline--compact">
+                    <div className="timeline-header">
+                      <h3>{copy.tracking.history}</h3>
                       <span>
-                        {formatWeight(shipment.weight_kg, locale)} {copy.tracking.weightUnit}
+                        {selectedShipment.status_history?.length || 0} {copy.tracking.events}
                       </span>
                     </div>
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <div className="empty-state">{copy.recent.empty}</div>
-            )}
-          </article>
-        </section>
-      </main>
+                    {selectedShipment.status_history?.length ? (
+                      <ul>
+                        {selectedShipment.status_history.slice(-3).reverse().map((item, index) => (
+                          <li key={`${item.status}-${item.timestamp}-${index}`}>
+                            <span className="timeline-dot" />
+                            <div>
+                              <strong>{copy.status[item.status] || item.status}</strong>
+                              <p>{item.location || copy.tracking.noLocation}</p>
+                              <small>{formatDateTime(item.timestamp, locale)}</small>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="empty-state">{copy.tracking.noHistory}</p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="empty-state">{copy.tracking.empty}</div>
+              )}
+            </article>
+          </section>
+        </main>
+      </div>
     </div>
   )
 }
