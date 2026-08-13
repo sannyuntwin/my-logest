@@ -51,6 +51,15 @@ const TRANSLATIONS = {
       noLocation: 'No location noted',
       weightUnit: 'kg',
     },
+    map: {
+      kicker: 'Route map',
+      title: 'Live shipment path',
+      subtitle: 'Approximate route view based on known hubs and shipment status',
+      origin: 'Origin',
+      current: 'Current',
+      destination: 'Destination',
+      unavailable: 'Map data unavailable for this route.',
+    },
     recent: {
       kicker: 'Operations snapshot',
       title: 'Recent shipments',
@@ -122,6 +131,15 @@ const TRANSLATIONS = {
       empty: 'ค้นหาหมายเลขติดตามเพื่อดูไทม์ไลน์และข้อมูลผู้ให้บริการ',
       noLocation: 'ไม่ได้ระบุสถานที่',
       weightUnit: 'กก.',
+    },
+    map: {
+      kicker: 'แผนที่เส้นทาง',
+      title: 'เส้นทางพัสดุแบบสด',
+      subtitle: 'มุมมองเส้นทางโดยประมาณจากศูนย์กลางที่รู้จักและสถานะพัสดุ',
+      origin: 'ต้นทาง',
+      current: 'ปัจจุบัน',
+      destination: 'ปลายทาง',
+      unavailable: 'ไม่สามารถแสดงข้อมูลแผนที่สำหรับเส้นทางนี้ได้',
     },
     recent: {
       kicker: 'ภาพรวมการปฏิบัติงาน',
@@ -195,6 +213,15 @@ const TRANSLATIONS = {
       noLocation: 'တည်နေရာ မဖော်ပြထားပါ',
       weightUnit: 'kg',
     },
+    map: {
+      kicker: 'လမ်းကြောင်းမြေပုံ',
+      title: 'ပစ္စည်းပို့ဆောင်မှု လမ်းကြောင်း',
+      subtitle: 'သိရှိထားသော hub များနှင့် status အပေါ်အခြေခံသည့် ခန့်မှန်းလမ်းကြောင်း',
+      origin: 'မူလနေရာ',
+      current: 'လက်ရှိ',
+      destination: 'ပို့မည့်နေရာ',
+      unavailable: 'ဤလမ်းကြောင်းအတွက် map data မရနိုင်ပါ',
+    },
     recent: {
       kicker: 'လုပ်ငန်းအခြေအနေ',
       title: 'နောက်ဆုံးပို့ဆောင်မှုများ',
@@ -228,6 +255,129 @@ const STATUS_TONES = {
   in_transit: 'status--transit',
   delivered: 'status--delivered',
   failed: 'status--failed',
+}
+
+const ROUTE_POINTS = {
+  bangkok: { x: 24, y: 76, label: 'Bangkok', aliases: ['bangkok', 'bkk'] },
+  chonburi: { x: 30, y: 81, label: 'Chonburi', aliases: ['chonburi', 'chon buri'] },
+  phuket: { x: 20, y: 90, label: 'Phuket', aliases: ['phuket'] },
+  surat_thani: { x: 28, y: 86, label: 'Surat Thani', aliases: ['surat thani'] },
+  khon_kaen: { x: 61, y: 54, label: 'Khon Kaen', aliases: ['khon kaen', 'khonkaen'] },
+  lampang: { x: 48, y: 42, label: 'Lampang', aliases: ['lampang'] },
+  chiang_mai: { x: 58, y: 28, label: 'Chiang Mai', aliases: ['chiang mai', 'chiangmai'] },
+  chiang_rai: { x: 67, y: 18, label: 'Chiang Rai', aliases: ['chiang rai', 'chiangrai'] },
+  udon_thani: { x: 71, y: 46, label: 'Udon Thani', aliases: ['udon thani', 'udonthani'] },
+}
+
+const ROUTE_STATUS_PROGRESS = {
+  pending: 0.18,
+  pickup: 0.34,
+  in_transit: 0.67,
+  delivered: 1,
+  failed: 0.52,
+}
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value))
+}
+
+function lerp(start, end, progress) {
+  return start + (end - start) * progress
+}
+
+function normalizeLocation(value) {
+  return value
+    ?.toLowerCase()
+    .replace(/hub|center|centre|depot|warehouse|terminal|regional/g, ' ')
+    .replace(/[^a-z0-9ก-๙\u0E00-\u0E7F\u1000-\u109F]+/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+function findRoutePoint(value) {
+  const normalized = normalizeLocation(value)
+  if (!normalized) {
+    return null
+  }
+
+  return (
+    Object.entries(ROUTE_POINTS).find(([, point]) =>
+      point.aliases.some((alias) => normalized.includes(alias)),
+    )?.[1] || null
+  )
+}
+
+function projectRoutePoint(point) {
+  return {
+    x: clamp(point.x, 8, 92),
+    y: clamp(point.y, 10, 92),
+  }
+}
+
+function buildRouteMapState(shipment) {
+  if (!shipment) {
+    return null
+  }
+
+  const origin = findRoutePoint(shipment.origin)
+  const destination = findRoutePoint(shipment.destination)
+  const current = findRoutePoint(shipment.current_location)
+  const progress = ROUTE_STATUS_PROGRESS[shipment.current_status] ?? 0.5
+
+  const originProjected = origin ? projectRoutePoint(origin) : null
+  const destinationProjected = destination ? projectRoutePoint(destination) : null
+  const currentProjected = current
+    ? projectRoutePoint(current)
+    : originProjected && destinationProjected
+      ? {
+          x: clamp(lerp(originProjected.x, destinationProjected.x, progress), 8, 92),
+          y: clamp(lerp(originProjected.y, destinationProjected.y, progress), 10, 92),
+        }
+      : null
+
+  const markers = []
+
+  if (originProjected) {
+    markers.push({
+      kind: 'origin',
+      label: shipment.origin || origin.label,
+      x: originProjected.x,
+      y: originProjected.y,
+    })
+  }
+
+  if (currentProjected) {
+    markers.push({
+      kind: 'current',
+      label: shipment.current_location || shipment.current_status,
+      x: currentProjected.x,
+      y: currentProjected.y,
+    })
+  }
+
+  if (destinationProjected) {
+    markers.push({
+      kind: 'destination',
+      label: shipment.destination || destination.label,
+      x: destinationProjected.x,
+      y: destinationProjected.y,
+    })
+  }
+
+  if (markers.length < 2) {
+    return null
+  }
+
+  const pathPoints = []
+  if (originProjected) pathPoints.push(originProjected)
+  if (currentProjected) pathPoints.push(currentProjected)
+  if (destinationProjected) pathPoints.push(destinationProjected)
+
+  return {
+    progress,
+    markers,
+    pathPoints,
+  }
 }
 
 const ERROR_KEY_TO_DETAIL = {
@@ -292,6 +442,108 @@ function translateError(detail, copy) {
 function ShipmentStatusBadge({ status, copy }) {
   const tone = STATUS_TONES[status] || 'status--pending'
   return <span className={`status-badge ${tone}`}>{copy.status[status] || status}</span>
+}
+
+function RouteMap({ shipment, copy }) {
+  const mapState = buildRouteMapState(shipment)
+  const statusLabel = shipment ? copy.status[shipment.current_status] || shipment.current_status : ''
+  const statusTone = shipment ? STATUS_TONES[shipment.current_status] || 'status--pending' : 'status--pending'
+
+  return (
+    <section className="route-map">
+      <div className="route-map__header">
+        <div>
+          <p className="panel-kicker">{copy.map.kicker}</p>
+          <h3>{copy.map.title}</h3>
+          <p className="route-map__subtitle">{copy.map.subtitle}</p>
+        </div>
+        {shipment ? <span className={`status-badge ${statusTone}`}>{statusLabel}</span> : null}
+      </div>
+
+      {mapState ? (
+        <>
+          <div className="route-map__viewport">
+            <svg
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              className="route-map__svg"
+              aria-hidden="true"
+            >
+              <defs>
+                <linearGradient id="routeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#7ea1ff" />
+                  <stop offset="100%" stopColor="#8dd9ff" />
+                </linearGradient>
+                <linearGradient id="routeGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#7fa9ff" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#8affe5" stopOpacity="0.2" />
+                </linearGradient>
+              </defs>
+
+              <rect x="0" y="0" width="100" height="100" rx="8" className="route-map__bg" />
+
+              <g className="route-map__grid">
+                {[12.5, 25, 37.5, 50, 62.5, 75, 87.5].map((value) => (
+                  <line key={`v-${value}`} x1={value} y1="0" x2={value} y2="100" />
+                ))}
+                {[16.66, 33.33, 50, 66.66, 83.33].map((value) => (
+                  <line key={`h-${value}`} x1="0" y1={value} x2="100" y2={value} />
+                ))}
+              </g>
+
+              <path
+                d="M18 20 C 36 18, 44 28, 52 35 S 67 49, 74 58 S 82 77, 92 86"
+                className="route-map__trail route-map__trail--ghost"
+                fill="none"
+              />
+
+              <path
+                d={`M ${mapState.pathPoints.map((point) => `${point.x} ${point.y}`).join(' L ')}`}
+                className="route-map__trail"
+                fill="none"
+              />
+
+              {mapState.markers.map((marker) => (
+                <circle
+                  key={`circle-${marker.kind}`}
+                  cx={marker.x}
+                  cy={marker.y}
+                  r={marker.kind === 'current' ? 3.2 : 2.6}
+                  className={`route-map__node route-map__node--${marker.kind}`}
+                />
+              ))}
+            </svg>
+
+            {mapState.markers.map((marker) => (
+              <div
+                key={`${marker.kind}-${marker.label}`}
+                className={`route-map__pin route-map__pin--${marker.kind}`}
+                style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
+              >
+                <span className="route-map__pin-dot" />
+                <strong>{copy.map[marker.kind]}</strong>
+                <small>{marker.label}</small>
+              </div>
+            ))}
+          </div>
+
+          <div className="route-map__legend">
+            {mapState.markers.map((marker) => (
+              <div key={`legend-${marker.kind}-${marker.label}`} className="route-map__legend-item">
+                <span className={`route-map__legend-dot route-map__legend-dot--${marker.kind}`} />
+                <div>
+                  <strong>{copy.map[marker.kind]}</strong>
+                  <p>{marker.label}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className="empty-state">{copy.map.unavailable}</div>
+      )}
+    </section>
+  )
 }
 
 function App() {
@@ -482,6 +734,8 @@ function App() {
 
             {trackingData ? (
               <div className="shipment-card">
+                <RouteMap shipment={trackingData} copy={copy} />
+
                 <div className="shipment-topline">
                   <div>
                     <span className="field-label">{copy.tracking.trackingNumber}</span>
