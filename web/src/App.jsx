@@ -8,6 +8,7 @@ const TRANSLATIONS = {
     meta: { htmlLang: 'en', pageTitle: 'Logistics Tracking' },
     languageLabel: 'Language',
     languages: { en: 'English', th: 'Thai', my: 'Myanmar' },
+    languageShort: { en: 'EN', th: 'TH', my: 'MM' },
     hero: {
       eyebrow: 'Logistics control center',
       title: 'Track shipments, surface bottlenecks, and keep the line moving.',
@@ -79,6 +80,7 @@ const TRANSLATIONS = {
     meta: { htmlLang: 'th', pageTitle: 'ระบบติดตามพัสดุ' },
     languageLabel: 'ภาษา',
     languages: { en: 'อังกฤษ', th: 'ไทย', my: 'พม่า' },
+    languageShort: { en: 'EN', th: 'TH', my: 'MM' },
     hero: {
       eyebrow: 'ศูนย์ควบคุมโลจิสติกส์',
       title: 'ติดตามพัสดุ ค้นหาจุดติดขัด และเดินงานให้ไหลลื่น',
@@ -150,6 +152,7 @@ const TRANSLATIONS = {
     meta: { htmlLang: 'my', pageTitle: 'ပို့ဆောင်ရေး ခြေရာခံစနစ်' },
     languageLabel: 'ဘာသာစကား',
     languages: { en: 'အင်္ဂလိပ်', th: 'ထိုင်း', my: 'မြန်မာ' },
+    languageShort: { en: 'EN', th: 'TH', my: 'MM' },
     hero: {
       eyebrow: 'လော့ဂျစ်တစ်စင်တာ',
       title: 'ပစ္စည်းပို့ဆောင်မှုကို ခြေရာခံပါ၊ အခက်အခဲနေရာများကို ရှာပါ၊ လုပ်ငန်းစဉ်ကို လျင်မြန်စွာဆက်လက်ထိန်းသိမ်းပါ',
@@ -406,19 +409,22 @@ function App() {
             <p className="eyebrow">{copy.hero.eyebrow}</p>
             <h1>{copy.hero.title}</h1>
             <p className="hero-text">{copy.hero.body}</p>
+          </div>
 
-            <div className="language-switcher" aria-label={copy.languageLabel}>
+          <div className="hero-actions">
+            <div className="language-switcher language-switcher--compact" aria-label={copy.languageLabel}>
               <span>{copy.languageLabel}</span>
               <div className="language-switcher__group" role="group" aria-label={copy.languageLabel}>
-                {Object.entries(copy.languages).map(([code, label]) => (
+                {Object.keys(copy.languages).map((code) => (
                   <button
                     key={code}
                     type="button"
                     className={`language-switcher__button ${language === code ? 'is-active' : ''}`}
                     onClick={() => setLanguage(code)}
                     aria-pressed={language === code}
+                    title={copy.languages[code]}
                   >
-                    {label}
+                    {copy.languageShort[code]}
                   </button>
                 ))}
               </div>
