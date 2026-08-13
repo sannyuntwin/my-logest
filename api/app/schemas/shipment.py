@@ -43,6 +43,7 @@ class ShipmentListItem(BaseModel):
     current_status: str
     origin: Optional[str] = None
     destination: Optional[str] = None
+    estimated_delivery: Optional[date] = None
     weight_kg: Decimal
     current_location: Optional[str] = None
     provider: ProviderOut

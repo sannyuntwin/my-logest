@@ -1,377 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
+import i18n, { getCopy, getInitialLanguage, LANGUAGE_STORAGE_KEY } from './i18n'
+import AppSideRail from './components/SideRail'
+import AppTopBar from './components/TopBar'
+import DashboardPage from './pages/DashboardPage'
+import AppShipmentsPage from './pages/ShipmentsPage'
+import logoImage from './img/image.png'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
-const LANGUAGE_STORAGE_KEY = 'logistics-language'
-
-const TRANSLATIONS = {
-  en: {
-    meta: { htmlLang: 'en', pageTitle: 'Logistics Tracking' },
-    languageLabel: 'Language',
-    languages: { en: 'English', th: 'Thai', my: 'Myanmar' },
-    languageShort: { en: 'EN', th: 'TH', my: 'MM' },
-    hero: {
-      eyebrow: 'Logistics control center',
-      title: 'Track shipments, surface bottlenecks, and keep the line moving.',
-      body: 'A polished frontend for the logistics exam project. Search by tracking number, inspect the latest routing updates, and review current shipments at a glance.',
-    },
-    dashboard: {
-      brand: 'Logistics OS',
-      brandSub: 'Global Operations',
-      navDashboard: 'Dashboard',
-      navShipments: 'Shipments',
-      navLiveMap: 'Live Map',
-      navDetails: 'Details',
-      navWarehouse: 'Warehouse',
-      navSettings: 'Settings',
-      searchPlaceholder: 'Search tracking ID...',
-      quickDirect: 'Direct Track',
-      quickFleet: 'Fleet',
-      quickCarriers: 'Carriers',
-      newShipment: 'New Shipment',
-      createAlert: 'Create Alert',
-      overviewTitle: 'Operations Overview',
-      overviewSubtitle: 'Real-time metrics and global fleet status.',
-      lastUpdated: 'Last updated',
-      lastUpdatedValue: 'Just now',
-      totalShipments: 'Total Shipments',
-      totalShipmentsNote: 'All tracked movements',
-      activeInTransit: 'Active in Transit',
-      activeInTransitNote: 'Currently moving',
-      pendingDelivery: 'Pending Delivery',
-      pendingDeliveryNote: 'Awaiting pickup or dispatch',
-      delayed: 'Delayed',
-      delayedNote: 'Needs review',
-      chartTitle: 'Live Fleet Activity',
-      chartSubtitle: '24-hour movement intensity',
-      recentEvents: 'Recent Transit Events',
-      viewAllEvents: 'View All Events',
-      globalFleetDistribution: 'Global Fleet Distribution',
-      routeHint: 'Tap a shipment to inspect the route',
-      period24h: '24H',
-      period7d: '7D',
-      period30d: '30D',
-      review: 'Review',
-      support: 'Support',
-      notifications: 'Notifications',
-      profile: 'Operations Manager',
-    },
-    search: {
-      label: 'Tracking number',
-      placeholder: 'Example: ABC123456',
-      button: 'Track',
-      searching: 'Searching...',
-      hint: 'Backend endpoint:',
-      missingTracking: 'Please enter a tracking number.',
-    },
-    metrics: {
-      apiStatus: 'API status',
-      apiNote: 'FastAPI + Postgres backend',
-      apiValue: 'Live',
-      trackedProviders: 'Tracked providers',
-      trackedProvidersValue: '3',
-      trackedProvidersNote: 'Kerry, Flash, J&T',
-      shipmentFocus: 'Shipment focus',
-      shipmentFocusValue: 'Tracking',
-      shipmentFocusNote: 'Search, history, and SLA visibility',
-    },
-    tracking: {
-      sectionKicker: 'Tracking result',
-      sectionTitle: 'Shipment details',
-      trackingNumber: 'Tracking number',
-      provider: 'Provider',
-      origin: 'Origin',
-      destination: 'Destination',
-      zone: 'Zone',
-      weight: 'Weight',
-      currentLocation: 'Current location',
-      estimatedDelivery: 'Estimated delivery',
-      history: 'Status history',
-      events: 'events',
-      noHistory: 'No status history yet.',
-      empty: 'Search a tracking number to see the shipment timeline and provider details.',
-      noLocation: 'No location noted',
-      weightUnit: 'kg',
-    },
-    map: {
-      kicker: 'Route map',
-      title: 'Live shipment path',
-      subtitle: 'Approximate route view based on known hubs and shipment status',
-      origin: 'Origin',
-      current: 'Current',
-      destination: 'Destination',
-      unavailable: 'Map data unavailable for this route.',
-    },
-    recent: {
-      kicker: 'Operations snapshot',
-      title: 'Recent shipments',
-      loading: 'Loading recent shipments...',
-      empty: 'No shipments returned yet.',
-      unknownProvider: 'Unknown provider',
-      fromTo: 'to',
-    },
-    errors: {
-      loadRecent: 'Unable to load recent shipments',
-      trackingLookup: 'Tracking lookup failed',
-      generic: 'Something went wrong',
-      notFound: 'Tracking number not found',
-      invalidTracking: 'Invalid tracking number format',
-      invalidDate: 'Invalid date format. Use YYYY-MM-DD',
-      invalidStatus: 'Invalid status. Allowed values: pending, pickup, in_transit, delivered, failed',
-    },
-    status: {
-      pending: 'Pending',
-      pickup: 'Pickup',
-      in_transit: 'In transit',
-      delivered: 'Delivered',
-      failed: 'Failed',
-    },
-  },
-  th: {
-    meta: { htmlLang: 'th', pageTitle: 'ระบบติดตามพัสดุ' },
-    languageLabel: 'ภาษา',
-    languages: { en: 'อังกฤษ', th: 'ไทย', my: 'พม่า' },
-    languageShort: { en: 'EN', th: 'TH', my: 'MM' },
-    hero: {
-      eyebrow: 'ศูนย์ควบคุมโลจิสติกส์',
-      title: 'ติดตามพัสดุ ค้นหาจุดติดขัด และเดินงานให้ไหลลื่น',
-      body: 'หน้าเว็บสำหรับโจทย์สอบโลจิสติกส์ ใช้ค้นหาด้วยเลขติดตาม ดูเส้นทางล่าสุด และตรวจสอบสถานะพัสดุแบบรวดเร็ว',
-    },
-    dashboard: {
-      brand: 'Logistics OS',
-      brandSub: 'Global Operations',
-      navDashboard: 'แดชบอร์ด',
-      navShipments: 'พัสดุ',
-      navLiveMap: 'แผนที่สด',
-      navDetails: 'รายละเอียด',
-      navWarehouse: 'คลังสินค้า',
-      navSettings: 'ตั้งค่า',
-      searchPlaceholder: 'ค้นหา tracking ID...',
-      quickDirect: 'ค้นหาเร็ว',
-      quickFleet: 'ฟลีต',
-      quickCarriers: 'ผู้ให้บริการ',
-      newShipment: 'สร้างพัสดุ',
-      createAlert: 'สร้างแจ้งเตือน',
-      overviewTitle: 'ภาพรวมการปฏิบัติงาน',
-      overviewSubtitle: 'ตัวชี้วัดแบบเรียลไทม์และสถานะฟลีตทั่วโลก',
-      lastUpdated: 'อัปเดตล่าสุด',
-      lastUpdatedValue: 'เมื่อสักครู่',
-      totalShipments: 'พัสดุทั้งหมด',
-      totalShipmentsNote: 'การเคลื่อนไหวทั้งหมดที่ติดตาม',
-      activeInTransit: 'กำลังขนส่ง',
-      activeInTransitNote: 'กำลังเดินทางอยู่',
-      pendingDelivery: 'รอจัดส่ง',
-      pendingDeliveryNote: 'รอรับเข้าระบบหรือส่งต่อ',
-      delayed: 'ล่าช้า',
-      delayedNote: 'ต้องตรวจสอบ',
-      chartTitle: 'กิจกรรมฟลีตสด',
-      chartSubtitle: 'ความเข้มข้นของการเคลื่อนไหว 24 ชั่วโมง',
-      recentEvents: 'เหตุการณ์ขนส่งล่าสุด',
-      viewAllEvents: 'ดูเหตุการณ์ทั้งหมด',
-      globalFleetDistribution: 'การกระจายฟลีตทั่วโลก',
-      routeHint: 'แตะพัสดุเพื่อดูเส้นทาง',
-      period24h: '24 ชม.',
-      period7d: '7 วัน',
-      period30d: '30 วัน',
-      review: 'ตรวจสอบ',
-      support: 'สนับสนุน',
-      notifications: 'การแจ้งเตือน',
-      profile: 'ผู้จัดการฝ่ายปฏิบัติการ',
-    },
-    search: {
-      label: 'หมายเลขติดตามพัสดุ',
-      placeholder: 'ตัวอย่าง: ABC123456',
-      button: 'ค้นหา',
-      searching: 'กำลังค้นหา...',
-      hint: 'API ฝั่งหลังบ้าน:',
-      missingTracking: 'กรุณากรอกหมายเลขติดตามพัสดุ',
-    },
-    metrics: {
-      apiStatus: 'สถานะ API',
-      apiNote: 'แบ็กเอนด์ FastAPI + Postgres',
-      apiValue: 'ใช้งานอยู่',
-      trackedProviders: 'ผู้ให้บริการที่รองรับ',
-      trackedProvidersValue: '3',
-      trackedProvidersNote: 'Kerry, Flash, J&T',
-      shipmentFocus: 'โฟกัสของระบบ',
-      shipmentFocusValue: 'การติดตาม',
-      shipmentFocusNote: 'ค้นหา ประวัติ และ SLA',
-    },
-    tracking: {
-      sectionKicker: 'ผลการติดตาม',
-      sectionTitle: 'รายละเอียดพัสดุ',
-      trackingNumber: 'หมายเลขติดตาม',
-      provider: 'ผู้ให้บริการ',
-      origin: 'ต้นทาง',
-      destination: 'ปลายทาง',
-      zone: 'โซน',
-      weight: 'น้ำหนัก',
-      currentLocation: 'ตำแหน่งปัจจุบัน',
-      estimatedDelivery: 'กำหนดส่งโดยประมาณ',
-      history: 'ประวัติสถานะ',
-      events: 'รายการ',
-      noHistory: 'ยังไม่มีประวัติสถานะ',
-      empty: 'ค้นหาหมายเลขติดตามเพื่อดูไทม์ไลน์และข้อมูลผู้ให้บริการ',
-      noLocation: 'ไม่ได้ระบุสถานที่',
-      weightUnit: 'กก.',
-    },
-    map: {
-      kicker: 'แผนที่เส้นทาง',
-      title: 'เส้นทางพัสดุแบบสด',
-      subtitle: 'มุมมองเส้นทางโดยประมาณจากศูนย์กลางที่รู้จักและสถานะพัสดุ',
-      origin: 'ต้นทาง',
-      current: 'ปัจจุบัน',
-      destination: 'ปลายทาง',
-      unavailable: 'ไม่สามารถแสดงข้อมูลแผนที่สำหรับเส้นทางนี้ได้',
-    },
-    recent: {
-      kicker: 'ภาพรวมการปฏิบัติงาน',
-      title: 'พัสดุล่าสุด',
-      loading: 'กำลังโหลดพัสดุล่าสุด...',
-      empty: 'ยังไม่มีรายการพัสดุ',
-      unknownProvider: 'ไม่ทราบผู้ให้บริการ',
-      fromTo: 'ถึง',
-    },
-    errors: {
-      loadRecent: 'ไม่สามารถโหลดพัสดุล่าสุดได้',
-      trackingLookup: 'การค้นหาพัสดุไม่สำเร็จ',
-      generic: 'เกิดข้อผิดพลาดบางอย่าง',
-      notFound: 'ไม่พบหมายเลขติดตามพัสดุ',
-      invalidTracking: 'รูปแบบหมายเลขติดตามพัสดุไม่ถูกต้อง',
-      invalidDate: 'รูปแบบวันที่ไม่ถูกต้อง ใช้ YYYY-MM-DD',
-      invalidStatus: 'สถานะไม่ถูกต้อง ค่าที่ใช้ได้: pending, pickup, in_transit, delivered, failed',
-    },
-    status: {
-      pending: 'รอดำเนินการ',
-      pickup: 'รับพัสดุแล้ว',
-      in_transit: 'กำลังขนส่ง',
-      delivered: 'จัดส่งแล้ว',
-      failed: 'จัดส่งไม่สำเร็จ',
-    },
-  },
-  my: {
-    meta: { htmlLang: 'my', pageTitle: 'ပို့ဆောင်ရေး ခြေရာခံစနစ်' },
-    languageLabel: 'ဘာသာစကား',
-    languages: { en: 'အင်္ဂလိပ်', th: 'ထိုင်း', my: 'မြန်မာ' },
-    languageShort: { en: 'EN', th: 'TH', my: 'MM' },
-    hero: {
-      eyebrow: 'လော့ဂျစ်တစ်စင်တာ',
-      title: 'ပစ္စည်းပို့ဆောင်မှုကို ခြေရာခံပါ၊ အခက်အခဲနေရာများကို ရှာပါ၊ လုပ်ငန်းစဉ်ကို လျင်မြန်စွာဆက်လက်ထိန်းသိမ်းပါ',
-      body: 'လော့ဂျစ်တစ်စာမေးပွဲအတွက် ပြုလုပ်ထားသော frontend ဖြစ်ပြီး tracking number ဖြင့်ရှာဖွေခြင်း၊ နောက်ဆုံးလမ်းကြောင်းများကြည့်ရှုခြင်းနှင့် လက်ရှိပစ္စည်းများကို မြင်ကွင်းတစ်ခုတည်းတွင် ကြည့်နိုင်သည်',
-    },
-    dashboard: {
-      brand: 'Logistics OS',
-      brandSub: 'Global Operations',
-      navDashboard: 'Dashboard',
-      navShipments: 'Shipments',
-      navLiveMap: 'Live Map',
-      navDetails: 'Details',
-      navWarehouse: 'Warehouse',
-      navSettings: 'Settings',
-      searchPlaceholder: 'Search tracking ID...',
-      quickDirect: 'Direct Track',
-      quickFleet: 'Fleet',
-      quickCarriers: 'Carriers',
-      newShipment: 'ပစ္စည်းအသစ်',
-      createAlert: 'Create Alert',
-      overviewTitle: 'Operations Overview',
-      overviewSubtitle: 'Real-time metrics and global fleet status.',
-      lastUpdated: 'Last updated',
-      lastUpdatedValue: 'Just now',
-      totalShipments: 'Total Shipments',
-      totalShipmentsNote: 'All tracked movements',
-      activeInTransit: 'Active in Transit',
-      activeInTransitNote: 'Currently moving',
-      pendingDelivery: 'Pending Delivery',
-      pendingDeliveryNote: 'Awaiting pickup or dispatch',
-      delayed: 'Delayed',
-      delayedNote: 'Needs review',
-      chartTitle: 'Live Fleet Activity',
-      chartSubtitle: '24-hour movement intensity',
-      recentEvents: 'Recent Transit Events',
-      viewAllEvents: 'View All Events',
-      globalFleetDistribution: 'Global Fleet Distribution',
-      routeHint: 'Tap a shipment to inspect the route',
-      period24h: '24H',
-      period7d: '7D',
-      period30d: '30D',
-      review: 'Review',
-      support: 'Support',
-      notifications: 'Notifications',
-      profile: 'Operations Manager',
-    },
-    search: {
-      label: 'Tracking နံပါတ်',
-      placeholder: 'ဥပမာ: ABC123456',
-      button: 'ရှာမည်',
-      searching: 'ရှာဖွေနေသည်...',
-      hint: 'Backend endpoint:',
-      missingTracking: 'Tracking နံပါတ်ကို ထည့်ပါ။',
-    },
-    metrics: {
-      apiStatus: 'API အခြေအနေ',
-      apiNote: 'FastAPI + Postgres backend',
-      apiValue: 'အသက်ဝင်',
-      trackedProviders: 'ပံ့ပိုးသူများ',
-      trackedProvidersValue: '3',
-      trackedProvidersNote: 'Kerry, Flash, J&T',
-      shipmentFocus: 'စနစ်အမျိုးအစား',
-      shipmentFocusValue: 'Tracking',
-      shipmentFocusNote: 'ရှာဖွေမှု၊ history နှင့် SLA မြင်ကွင်း',
-    },
-    tracking: {
-      sectionKicker: 'ခြေရာခံရလဒ်',
-      sectionTitle: 'ပစ္စည်းအသေးစိတ်',
-      trackingNumber: 'Tracking နံပါတ်',
-      provider: 'ပံ့ပိုးသူ',
-      origin: 'မူလနေရာ',
-      destination: 'ပို့မည့်နေရာ',
-      zone: 'ဇုန်',
-      weight: 'အလေးချိန်',
-      currentLocation: 'လက်ရှိတည်နေရာ',
-      estimatedDelivery: 'ခန့်မှန်းပို့ချိန်',
-      history: 'အခြေအနေမှတ်တမ်း',
-      events: 'ကြိမ်',
-      noHistory: 'အခြေအနေမှတ်တမ်း မရှိသေးပါ',
-      empty: 'tracking number တစ်ခုရှာပြီး timeline နှင့် provider detail ကိုကြည့်ပါ',
-      noLocation: 'တည်နေရာ မဖော်ပြထားပါ',
-      weightUnit: 'kg',
-    },
-    map: {
-      kicker: 'လမ်းကြောင်းမြေပုံ',
-      title: 'ပစ္စည်းပို့ဆောင်မှု လမ်းကြောင်း',
-      subtitle: 'သိရှိထားသော hub များနှင့် status အပေါ်အခြေခံသည့် ခန့်မှန်းလမ်းကြောင်း',
-      origin: 'မူလနေရာ',
-      current: 'လက်ရှိ',
-      destination: 'ပို့မည့်နေရာ',
-      unavailable: 'ဤလမ်းကြောင်းအတွက် map data မရနိုင်ပါ',
-    },
-    recent: {
-      kicker: 'လုပ်ငန်းအခြေအနေ',
-      title: 'နောက်ဆုံးပို့ဆောင်မှုများ',
-      loading: 'နောက်ဆုံးပို့ဆောင်မှုများကို ဖွင့်နေသည်...',
-      empty: 'ပစ္စည်းစာရင်း မရှိသေးပါ',
-      unknownProvider: 'ပံ့ပိုးသူ မသိရှိ',
-      fromTo: 'သို့',
-    },
-    errors: {
-      loadRecent: 'နောက်ဆုံးပို့ဆောင်မှုများကို မဖွင့်နိုင်ပါ',
-      trackingLookup: 'Tracking ရှာဖွေမှု မအောင်မြင်ပါ',
-      generic: 'အမှားတစ်ခု ဖြစ်ပွားခဲ့သည်',
-      notFound: 'Tracking နံပါတ် မတွေ့ပါ',
-      invalidTracking: 'Tracking နံပါတ် ပုံစံ မမှန်ပါ',
-      invalidDate: 'နေ့စွဲပုံစံ မမှန်ပါ။ YYYY-MM-DD ကိုသုံးပါ',
-      invalidStatus: 'Status မမှန်ပါ။ အသုံးပြုနိုင်သော တန်ဖိုးများ: pending, pickup, in_transit, delivered, failed',
-    },
-    status: {
-      pending: 'စောင့်ဆိုင်းနေသည်',
-      pickup: 'ပစ္စည်းလက်ခံပြီး',
-      in_transit: 'ပို့ဆောင်နေသည်',
-      delivered: 'ပို့ဆောင်ပြီး',
-      failed: 'ပို့ဆောင်မအောင်မြင်',
-    },
-  },
-}
-
 const STATUS_TONES = {
   pending: 'status--pending',
   pickup: 'status--pickup',
@@ -506,29 +141,12 @@ function buildRouteMapState(shipment) {
 const ERROR_KEY_TO_DETAIL = {
   notFound: 'Tracking number not found',
   invalidTracking: 'Invalid tracking number format',
-  invalidDate: 'Invalid date format. Use YYYY-MM-DD',
+  invalidDate: 'Invalid date format. Expected YYYY-MM-DD',
   invalidStatusPrefix: 'Invalid status.',
   loadRecent: 'Unable to load recent shipments',
   trackingLookup: 'Tracking lookup failed',
 }
 
-function getInitialLanguage() {
-  if (typeof window === 'undefined') {
-    return 'en'
-  }
-
-  const stored = window.localStorage.getItem(LANGUAGE_STORAGE_KEY)
-  if (stored && TRANSLATIONS[stored]) {
-    return stored
-  }
-
-  const browserLanguage = window.navigator.language?.slice(0, 2)
-  return TRANSLATIONS[browserLanguage] ? browserLanguage : 'en'
-}
-
-function getCopy(language) {
-  return TRANSLATIONS[language] || TRANSLATIONS.en
-}
 
 function formatWeight(value, locale) {
   if (value == null) return '—'
@@ -544,6 +162,18 @@ function formatDateTime(value, locale) {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(date)
+}
+
+function formatDateOnly(value, locale) {
+  if (!value) return '—'
+  const date = new Date(value)
+  return new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+  }).format(date)
+}
+
+function interpolate(template, values) {
+  return template.replace(/\{(\w+)\}/g, (_, key) => `${values[key] ?? ''}`)
 }
 
 function translateError(detail, copy) {
@@ -565,6 +195,30 @@ function translateError(detail, copy) {
 function ShipmentStatusBadge({ status, copy }) {
   const tone = STATUS_TONES[status] || 'status--pending'
   return <span className={`status-badge ${tone}`}>{copy.status[status] || status}</span>
+}
+
+const SHIPMENT_STATUS_FILTERS = ['', 'pending', 'pickup', 'in_transit', 'delivered', 'failed']
+const SHIPMENT_PAGE_SIZE_OPTIONS = [10, 20, 50]
+
+function buildPaginationItems(page, totalPages) {
+  if (totalPages <= 1) {
+    return [1]
+  }
+
+  const items = new Set([1, totalPages, page - 1, page, page + 1])
+  return Array.from(items)
+    .filter((value) => Number.isInteger(value) && value >= 1 && value <= totalPages)
+    .sort((a, b) => a - b)
+    .reduce((acc, value, index, array) => {
+      acc.push(value)
+
+      const next = array[index + 1]
+      if (next && next - value > 1) {
+        acc.push('...')
+      }
+
+      return acc
+    }, [])
 }
 
 function RouteMap({
@@ -833,20 +487,271 @@ function TransitFeed({ shipments, copy, locale, onSelectShipment }) {
   )
 }
 
-function SideRail({ copy, onSelectNav }) {
+function ShipmentsPage({
+  copy,
+  locale,
+  shipmentsState,
+  loadingShipments,
+  shipmentsError,
+  filters,
+  onStatusChange,
+  onDateChange,
+  onPerPageChange,
+  onPageChange,
+  onResetFilters,
+  onInspectShipment,
+  selectedShipment,
+}) {
+  const totalPages = Math.max(1, Math.ceil((shipmentsState.total || 0) / shipmentsState.per_page))
+  const pageItems = buildPaginationItems(shipmentsState.page, totalPages)
+  const from = shipmentsState.total ? (shipmentsState.page - 1) * shipmentsState.per_page + 1 : 0
+  const to = shipmentsState.total
+    ? Math.min(shipmentsState.page * shipmentsState.per_page, shipmentsState.total)
+    : 0
+  const selectedStatusLabel = filters.status ? copy.status[filters.status] || filters.status : copy.shipments.statusAll
+
+  return (
+    <section className="shipments-layout">
+      <article className="dashboard-panel shipments-panel">
+        <div className="panel-heading panel-heading--compact shipments-panel__heading">
+          <div>
+            <p className="panel-kicker">{copy.shipments.eyebrow}</p>
+            <h2>{copy.shipments.title}</h2>
+            <p className="shipments-panel__subtitle">{copy.shipments.subtitle}</p>
+          </div>
+          <div className="shipments-summary">
+            <strong>{selectedStatusLabel}</strong>
+            <span>{interpolate(copy.shipments.rangeLabel, { from, to, total: shipmentsState.total || 0 })}</span>
+          </div>
+        </div>
+
+        <div className="shipments-filters" aria-label={copy.shipments.filtersTitle}>
+          <label className="shipments-filter">
+            <span>{copy.shipments.statusLabel}</span>
+            <select value={filters.status} onChange={(event) => onStatusChange(event.target.value)}>
+              <option value="">{copy.shipments.statusAll}</option>
+              {SHIPMENT_STATUS_FILTERS.filter(Boolean).map((status) => (
+                <option key={status} value={status}>
+                  {copy.status[status] || status}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="shipments-filter">
+            <span>{copy.shipments.dateLabel}</span>
+            <input
+              type="date"
+              value={filters.date}
+              onChange={(event) => onDateChange(event.target.value)}
+            />
+          </label>
+
+          <label className="shipments-filter">
+            <span>{copy.shipments.perPageLabel}</span>
+            <select value={filters.perPage} onChange={(event) => onPerPageChange(Number(event.target.value))}>
+              {SHIPMENT_PAGE_SIZE_OPTIONS.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <button type="button" className="shipments-filter__reset" onClick={onResetFilters}>
+            {copy.shipments.reset}
+          </button>
+        </div>
+
+        {shipmentsError ? <div className="dashboard-alert">{shipmentsError}</div> : null}
+
+        {loadingShipments ? (
+          <div className="empty-state">{copy.shipments.loading}</div>
+        ) : shipmentsState.data?.length ? (
+          <div className="shipments-table-wrap">
+            <table className="shipments-table">
+              <thead>
+                <tr>
+                  <th>{copy.shipments.columns.shipmentId}</th>
+                  <th>{copy.shipments.columns.origin}</th>
+                  <th>{copy.shipments.columns.destination}</th>
+                  <th>{copy.shipments.columns.carrier}</th>
+                  <th>{copy.shipments.columns.status}</th>
+                  <th>{copy.shipments.columns.eta}</th>
+                  <th>{copy.shipments.columns.actions}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {shipmentsState.data.map((shipment) => (
+                  <tr key={shipment.id}>
+                    <td>
+                      <button type="button" className="shipments-table__id" onClick={() => onInspectShipment(shipment.tracking_number)}>
+                        {shipment.tracking_number}
+                      </button>
+                    </td>
+                    <td>{shipment.origin || '—'}</td>
+                    <td>{shipment.destination || '—'}</td>
+                    <td>{shipment.provider?.name || copy.recent.unknownProvider}</td>
+                    <td>
+                      <ShipmentStatusBadge status={shipment.current_status} copy={copy} />
+                    </td>
+                    <td>{formatDateOnly(shipment.estimated_delivery, locale)}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="shipments-table__action"
+                        onClick={() => onInspectShipment(shipment.tracking_number)}
+                      >
+                        {copy.shipments.inspect}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="empty-state">{copy.shipments.empty}</div>
+        )}
+
+        <div className="shipments-pagination" aria-label={copy.shipments.title}>
+          <span className="shipments-pagination__summary">
+            {interpolate(copy.shipments.rangeLabel, { from, to, total: shipmentsState.total || 0 })}
+          </span>
+          <div className="shipments-pagination__controls">
+            <button
+              type="button"
+              className="shipments-pagination__button"
+              onClick={() => onPageChange(Math.max(1, shipmentsState.page - 1))}
+              disabled={shipmentsState.page <= 1}
+            >
+              Prev
+            </button>
+
+            {pageItems.map((item, index) =>
+              item === '...' ? (
+                <span key={`ellipsis-${index}`} className="shipments-pagination__ellipsis">
+                  ...
+                </span>
+              ) : (
+                <button
+                  key={item}
+                  type="button"
+                  className={`shipments-pagination__button ${item === shipmentsState.page ? 'is-active' : ''}`}
+                  onClick={() => onPageChange(item)}
+                >
+                  {item}
+                </button>
+              ),
+            )}
+
+            <button
+              type="button"
+              className="shipments-pagination__button"
+              onClick={() => onPageChange(Math.min(totalPages, shipmentsState.page + 1))}
+              disabled={shipmentsState.page >= totalPages}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article className="dashboard-panel shipments-panel shipments-panel--detail">
+        <div className="panel-heading panel-heading--compact">
+          <div>
+            <p className="panel-kicker">{copy.tracking.sectionKicker}</p>
+            <h2>{copy.tracking.sectionTitle}</h2>
+          </div>
+          {selectedShipment ? <ShipmentStatusBadge status={selectedShipment.current_status} copy={copy} /> : null}
+        </div>
+
+        {selectedShipment ? (
+          <div className="shipment-card shipment-card--compact">
+            <div className="detail-grid detail-grid--single">
+              <div>
+                <span className="field-label">{copy.tracking.trackingNumber}</span>
+                <p>{selectedShipment.tracking_number}</p>
+              </div>
+              <div>
+                <span className="field-label">{copy.tracking.provider}</span>
+                <p>{selectedShipment.provider?.name || '—'}</p>
+              </div>
+              <div>
+                <span className="field-label">{copy.tracking.origin}</span>
+                <p>{selectedShipment.origin || '—'}</p>
+              </div>
+              <div>
+                <span className="field-label">{copy.tracking.destination}</span>
+                <p>{selectedShipment.destination || '—'}</p>
+              </div>
+              <div>
+                <span className="field-label">{copy.tracking.currentLocation}</span>
+                <p>{selectedShipment.current_location || '—'}</p>
+              </div>
+              <div>
+                <span className="field-label">{copy.tracking.weight}</span>
+                <p>
+                  {formatWeight(selectedShipment.weight_kg, locale)} {copy.tracking.weightUnit}
+                </p>
+              </div>
+              <div>
+                <span className="field-label">{copy.shipments.columns.eta}</span>
+                <p>{formatDateOnly(selectedShipment.estimated_delivery, locale)}</p>
+              </div>
+              <div>
+                <span className="field-label">{copy.dashboard.lastUpdated}</span>
+                <p>{formatDateTime(selectedShipment.created_at, locale)}</p>
+              </div>
+            </div>
+
+            <div className="timeline timeline--compact">
+              <div className="timeline-header">
+                <h3>{copy.tracking.history}</h3>
+                <span>{selectedShipment.status_history?.length || 0} {copy.tracking.events}</span>
+              </div>
+              {selectedShipment.status_history?.length ? (
+                <ul>
+                  {selectedShipment.status_history.slice(-3).reverse().map((item, index) => (
+                    <li key={`${item.status}-${item.timestamp}-${index}`}>
+                      <span className="timeline-dot" />
+                      <div>
+                        <strong>{copy.status[item.status] || item.status}</strong>
+                        <p>{item.location || copy.tracking.noLocation}</p>
+                        <small>{formatDateTime(item.timestamp, locale)}</small>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="empty-state">{copy.shipments.selectShipment}</p>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="empty-state">{copy.shipments.selectShipment}</div>
+        )}
+      </article>
+    </section>
+  )
+}
+
+function SideRail({ copy, activeView, onSelectNav }) {
   const navItems = [
-    copy.dashboard.navDashboard,
-    copy.dashboard.navShipments,
-    copy.dashboard.navLiveMap,
-    copy.dashboard.navDetails,
-    copy.dashboard.navWarehouse,
-    copy.dashboard.navSettings,
+    { key: 'dashboard', label: copy.dashboard.navDashboard },
+    { key: 'shipments', label: copy.dashboard.navShipments },
+    { key: 'live-map', label: copy.dashboard.navLiveMap },
+    { key: 'details', label: copy.dashboard.navDetails },
+    { key: 'warehouse', label: copy.dashboard.navWarehouse },
+    { key: 'settings', label: copy.dashboard.navSettings },
   ]
 
   return (
     <aside className="sidebar">
       <div className="sidebar__brand">
-        <div className="sidebar__logo">LO</div>
+        <div className="sidebar__logo">
+          <img className="sidebar__logo-image" src={logoImage} alt="JOSTech" />
+        </div>
         <div>
           <strong>{copy.dashboard.brand}</strong>
           <p>{copy.dashboard.brandSub}</p>
@@ -861,13 +766,13 @@ function SideRail({ copy, onSelectNav }) {
       <nav className="sidebar__nav" aria-label={copy.dashboard.navDashboard}>
         {navItems.map((item, index) => (
           <button
-            key={item}
+            key={item.key}
             type="button"
-            className={`sidebar__nav-item ${index === 0 ? 'is-active' : ''}`}
-            onClick={() => onSelectNav?.(item)}
+            className={`sidebar__nav-item ${activeView === item.key || (!activeView && index === 0) ? 'is-active' : ''}`}
+            onClick={() => onSelectNav?.(item.key)}
           >
             <span className="sidebar__dot" />
-            {item}
+            {item.label}
           </button>
         ))}
       </nav>
@@ -945,7 +850,8 @@ function TopBar({ copy, trackingNumber, onTrackingChange, onSubmit, loadingTrack
 
 function App() {
   const [language, setLanguage] = useState(getInitialLanguage)
-  const copy = getCopy(language)
+  const copy = useMemo(() => getCopy(language), [language])
+  const [activeView, setActiveView] = useState('dashboard')
   const [trackingNumber, setTrackingNumber] = useState('')
   const [trackingData, setTrackingData] = useState(null)
   const [recentShipments, setRecentShipments] = useState([])
@@ -953,12 +859,27 @@ function App() {
   const [loadingRecent, setLoadingRecent] = useState(true)
   const [errorState, setErrorState] = useState(null)
   const [timeRange, setTimeRange] = useState('24h')
+  const [shipmentsFilters, setShipmentsFilters] = useState({
+    status: '',
+    date: '',
+    page: 1,
+    perPage: 20,
+  })
+  const [shipmentsState, setShipmentsState] = useState({
+    data: [],
+    total: 0,
+    page: 1,
+    per_page: 20,
+  })
+  const [loadingShipments, setLoadingShipments] = useState(false)
+  const [shipmentsError, setShipmentsError] = useState(null)
 
   useEffect(() => {
     if (typeof window === 'undefined') {
       return
     }
 
+    i18n.changeLanguage(language)
     document.documentElement.lang = copy.meta.htmlLang
     document.title = copy.meta.pageTitle
 
@@ -997,6 +918,64 @@ function App() {
     loadRecentShipments()
     return () => controller.abort()
   }, [])
+
+  useEffect(() => {
+    if (activeView !== 'shipments') {
+      return undefined
+    }
+
+    const controller = new AbortController()
+
+    async function loadShipmentsPage() {
+      try {
+        setLoadingShipments(true)
+        setShipmentsError(null)
+
+        const params = new URLSearchParams()
+        params.set('page', String(shipmentsFilters.page))
+        params.set('per_page', String(shipmentsFilters.perPage))
+
+        if (shipmentsFilters.status) {
+          params.set('status', shipmentsFilters.status)
+        }
+
+        if (shipmentsFilters.date) {
+          params.set('date', shipmentsFilters.date)
+        }
+
+        const response = await fetch(`${API_BASE_URL}/api/shipments?${params.toString()}`, {
+          signal: controller.signal,
+        })
+        const payload = await response.json()
+
+        if (!response.ok) {
+          throw new Error(payload.detail || copy.errors.generic)
+        }
+
+        setShipmentsState({
+          data: payload.data || [],
+          total: payload.total || 0,
+          page: payload.page || shipmentsFilters.page,
+          per_page: payload.per_page || shipmentsFilters.perPage,
+        })
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          setShipmentsError(translateError(err.message, copy))
+          setShipmentsState({
+            data: [],
+            total: 0,
+            page: shipmentsFilters.page,
+            per_page: shipmentsFilters.perPage,
+          })
+        }
+      } finally {
+        setLoadingShipments(false)
+      }
+    }
+
+    loadShipmentsPage()
+    return () => controller.abort()
+  }, [activeView, shipmentsFilters.page, shipmentsFilters.perPage, shipmentsFilters.status, shipmentsFilters.date, copy])
 
   async function loadShipment(trackingId) {
     try {
@@ -1056,18 +1035,63 @@ function App() {
     () => buildActivitySeries(recentShipments, timeRange),
     [recentShipments, timeRange],
   )
-  const selectedShipment = trackingData || recentShipments[0] || null
+  const selectedShipment = trackingData || (activeView === 'shipments' ? shipmentsState.data[0] : recentShipments[0]) || null
+
   const inspectShipment = async (trackingId) => {
     setTrackingNumber(trackingId)
     await loadShipment(trackingId)
   }
 
+  const handleViewChange = (view) => {
+    setActiveView(view)
+  }
+
+  const handleShipmentsStatusChange = (status) => {
+    setShipmentsFilters((current) => ({
+      ...current,
+      status,
+      page: 1,
+    }))
+  }
+
+  const handleShipmentsDateChange = (date) => {
+    setShipmentsFilters((current) => ({
+      ...current,
+      date,
+      page: 1,
+    }))
+  }
+
+  const handleShipmentsPerPageChange = (perPage) => {
+    setShipmentsFilters((current) => ({
+      ...current,
+      perPage,
+      page: 1,
+    }))
+  }
+
+  const handleShipmentsPageChange = (page) => {
+    setShipmentsFilters((current) => ({
+      ...current,
+      page,
+    }))
+  }
+
+  const handleResetShipmentsFilters = () => {
+    setShipmentsFilters({
+      status: '',
+      date: '',
+      page: 1,
+      perPage: 20,
+    })
+  }
+
   return (
     <div className="os-shell">
-      <SideRail copy={copy} onSelectNav={() => {}} />
+      <AppSideRail copy={copy} activeView={activeView} onSelectNav={handleViewChange} />
 
       <div className="workspace">
-        <TopBar
+        <AppTopBar
           copy={copy}
           trackingNumber={trackingNumber}
           onTrackingChange={setTrackingNumber}
@@ -1078,146 +1102,37 @@ function App() {
         />
 
         <main className="dashboard">
-          <section className="overview-card">
-            <div>
-              <p className="eyebrow">{copy.dashboard.brandSub}</p>
-              <h1>{copy.dashboard.overviewTitle}</h1>
-              <p className="overview-card__subtitle">{copy.dashboard.overviewSubtitle}</p>
-            </div>
-            <div className="overview-card__meta">
-              <span>{copy.dashboard.lastUpdated}</span>
-              <strong>{copy.dashboard.lastUpdatedValue}</strong>
-            </div>
-          </section>
-
-          {errorMessage ? <div className="dashboard-alert">{errorMessage}</div> : null}
-
-          <section className="metrics-grid metrics-grid--overview">
-            <MetricCard
-              label={copy.dashboard.totalShipments}
-              value={fleetSummary.total}
-              note={copy.dashboard.totalShipmentsNote}
-              tone="blue"
-            />
-            <MetricCard
-              label={copy.dashboard.activeInTransit}
-              value={fleetSummary.active}
-              note={copy.dashboard.activeInTransitNote}
-              tone="teal"
-            />
-            <MetricCard
-              label={copy.dashboard.pendingDelivery}
-              value={fleetSummary.pending}
-              note={copy.dashboard.pendingDeliveryNote}
-              tone="amber"
-            />
-            <MetricCard
-              label={copy.dashboard.delayed}
-              value={fleetSummary.delayed}
-              note={copy.dashboard.delayedNote}
-              tone="rose"
-            />
-          </section>
-
-          <section className="main-grid">
-            <ActivityChart
-              series={activitySeries}
-              copy={copy}
-              range={timeRange}
-              onChangeRange={setTimeRange}
-            />
-            <TransitFeed
-              shipments={recentShipments}
+          {activeView === 'shipments' ? (
+            <AppShipmentsPage
               copy={copy}
               locale={locale}
-              onSelectShipment={inspectShipment}
+              shipmentsState={shipmentsState}
+              loadingShipments={loadingShipments}
+              shipmentsError={shipmentsError}
+              filters={shipmentsFilters}
+              onStatusChange={handleShipmentsStatusChange}
+              onDateChange={handleShipmentsDateChange}
+              onPerPageChange={handleShipmentsPerPageChange}
+              onPageChange={handleShipmentsPageChange}
+              onResetFilters={handleResetShipmentsFilters}
+              onInspectShipment={inspectShipment}
+              selectedShipment={selectedShipment}
             />
-          </section>
-
-          <section className="bottom-grid">
-            <article className="dashboard-panel dashboard-panel--map">
-              <RouteMap
-                shipment={selectedShipment}
-                copy={copy}
-                kicker={copy.dashboard.globalFleetDistribution}
-                title={copy.dashboard.globalFleetDistribution}
-                subtitle={copy.dashboard.routeHint}
-                emptyLabel={copy.map.unavailable}
-              />
-            </article>
-
-            <article className="dashboard-panel dashboard-panel--detail">
-              <div className="panel-heading panel-heading--compact">
-                <div>
-                  <p className="panel-kicker">{copy.tracking.sectionKicker}</p>
-                  <h2>{copy.tracking.sectionTitle}</h2>
-                </div>
-                {selectedShipment ? (
-                  <ShipmentStatusBadge status={selectedShipment.current_status} copy={copy} />
-                ) : null}
-              </div>
-
-              {selectedShipment ? (
-                <div className="shipment-card shipment-card--compact">
-                  <div className="detail-grid detail-grid--single">
-                    <div>
-                      <span className="field-label">{copy.tracking.trackingNumber}</span>
-                      <p>{selectedShipment.tracking_number}</p>
-                    </div>
-                    <div>
-                      <span className="field-label">{copy.tracking.provider}</span>
-                      <p>{selectedShipment.provider?.name || '—'}</p>
-                    </div>
-                    <div>
-                      <span className="field-label">{copy.tracking.origin}</span>
-                      <p>{selectedShipment.origin || '—'}</p>
-                    </div>
-                    <div>
-                      <span className="field-label">{copy.tracking.destination}</span>
-                      <p>{selectedShipment.destination || '—'}</p>
-                    </div>
-                    <div>
-                      <span className="field-label">{copy.tracking.currentLocation}</span>
-                      <p>{selectedShipment.current_location || '—'}</p>
-                    </div>
-                    <div>
-                      <span className="field-label">{copy.tracking.weight}</span>
-                      <p>
-                        {formatWeight(selectedShipment.weight_kg, locale)} {copy.tracking.weightUnit}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="timeline timeline--compact">
-                    <div className="timeline-header">
-                      <h3>{copy.tracking.history}</h3>
-                      <span>
-                        {selectedShipment.status_history?.length || 0} {copy.tracking.events}
-                      </span>
-                    </div>
-                    {selectedShipment.status_history?.length ? (
-                      <ul>
-                        {selectedShipment.status_history.slice(-3).reverse().map((item, index) => (
-                          <li key={`${item.status}-${item.timestamp}-${index}`}>
-                            <span className="timeline-dot" />
-                            <div>
-                              <strong>{copy.status[item.status] || item.status}</strong>
-                              <p>{item.location || copy.tracking.noLocation}</p>
-                              <small>{formatDateTime(item.timestamp, locale)}</small>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="empty-state">{copy.tracking.noHistory}</p>
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <div className="empty-state">{copy.tracking.empty}</div>
-              )}
-            </article>
-          </section>
+          ) : (
+            <DashboardPage
+              copy={copy}
+              locale={locale}
+              errorMessage={errorMessage}
+              fleetSummary={fleetSummary}
+              activitySeries={activitySeries}
+              timeRange={timeRange}
+              onChangeTimeRange={setTimeRange}
+              recentShipments={recentShipments}
+              onSelectShipment={inspectShipment}
+              selectedShipment={selectedShipment}
+              activeMilestones={activeMilestones}
+            />
+          )}
         </main>
       </div>
     </div>
@@ -1225,3 +1140,4 @@ function App() {
 }
 
 export default App
+

@@ -26,7 +26,7 @@ def normalize_tracking_number(tracking_number: str) -> str:
 
 
 def normalize_status(status: str) -> str:
-    value = status.strip().lower()
+    value = status.strip().lower().replace("-", "_").replace(" ", "_")
     if value not in ALLOWED_STATUSES:
         raise HTTPException(
             status_code=400,
@@ -75,7 +75,7 @@ def list_shipments(
         except ValueError:
             raise HTTPException(
                 status_code=400,
-                detail="Invalid date format. Use YYYY-MM-DD"
+                detail="Invalid date format. Expected YYYY-MM-DD"
             )
 
     # Total count

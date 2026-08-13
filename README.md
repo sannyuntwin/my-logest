@@ -6,7 +6,7 @@ Logistics tracking project with a FastAPI backend, PostgreSQL database, and a Re
 
 - Backend API for shipment tracking and shipment listing
 - Database schema for providers, shipments, status history, and provider rates
-- Seed data for providers, pricing, and a sample shipment
+- Seed data for providers, pricing, and 100 sample shipments
 - Frontend dashboard for tracking lookup, route map visualization, and recent shipment viewing
 - Frontend language support for English, Thai, and Myanmar
 - Docker Compose setup for local development
@@ -91,5 +91,5 @@ $env:VITE_API_BASE_URL="http://localhost:8000"
 ## Notes
 
 - The database is seeded automatically when the API starts.
-- The sample shipment is created for tracking demo purposes.
+- 100 demo shipments are created automatically for the shipments screen, including `ABC123456` for tracking demos.
 - `.env` is intentionally excluded from git.
