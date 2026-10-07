@@ -65,6 +65,8 @@ import RolesPage from "./pages/Administration/RolesPage";
 import RoleDetailsPage from "./pages/Administration/RoleDetailsPage";
 
 import AuditLogsPage from "./pages/Administration/AuditLogsPage";
+import Tms3DPage from "./pages/transportation/Tms3DPage";
+
 
 
 function PlaceholderPage({
@@ -320,6 +322,14 @@ function App() {
               <AuditLogsPage />
             }
           />
+
+          {/* Transportation 3D */}
+          <Route
+            path="/transportation/3d"
+            element={<Tms3DPage />}
+          />
+
+          
         </Route>
       </Routes>
     </BrowserRouter>
